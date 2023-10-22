@@ -1,0 +1,4 @@
+#TiY 10-1
+In Python you can create a number guessing game.
+In Python you can store a lot of information.
+In Python you can get input from the user. 
