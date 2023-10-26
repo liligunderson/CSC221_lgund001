@@ -264,7 +264,7 @@ def read_and_clean_data(input_file_path):
 
 def write_cleaned_data(header, data, output_file_path):
     try:
-        with open(output_file_path, 'w') as file:
+        with open(output_file_path, 'w') as file: 
             file.write(header + '\n') 
             for entry in data:
                 file.write(entry + '\n') 
@@ -284,11 +284,15 @@ def compare_files(file_path1, file_path2):
 source_data_file = 'source.txt'
 received_data_files = ['as_received1.txt', 'as_received2.txt', 'as_received3.txt']
 cleaned_data_file = 'cleaned.txt'
+corrupt_files = []
 
 
 for received_file in received_data_files:
     header, cleaned_data = read_and_clean_data(received_file)
-    write_cleaned_data(header, cleaned_data, received_file)
+    if header is None:
+        corrupt_files.append(received_file)
+    else:
+        write_cleaned_data(header, cleaned_data, received_file)
 
 
 header, source_data = read_and_clean_data(source_data_file)
@@ -298,3 +302,8 @@ if compare_files(cleaned_data_file, source_data_file):
     print('The files are identical.')
 else:
     print('The files are not identical.')
+
+if corrupt_files:
+    print('Corrupt files have been found:')
+    for corrupt_file in corrupt_files:
+        print(corrupt_file)
