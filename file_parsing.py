@@ -223,47 +223,63 @@ def make_files(my_name, record_count=100):
 # Generate 20-50 records to debug and 100000 for your final code check
 make_files(my_name='Lili Gunderson', record_count=1000000)
 
+
+   
+corrections = [
+    ('nnn', 'nn'),
+    ('++', '+'),
+    ('0O', '00'),
+    ('_dot_com', '.com'),
+    ('swiming', 'swimming'),
+    ('platsburg', 'plattsburgh'),
+    ('platsburgh', 'plattsburgh'),
+    ('platsberg', 'plattsburgh'),
+    ('_', ' '),
+    ('plattsburg', 'plattsburgh'),
+    ('plattsberg', 'plattsburgh'),
+    ('plattsburghh', 'plattsburgh'),
+    ('plattsbeurghhh', 'plattsburgh'),
+    ('plattsburghh', 'plattsburgh')
+]
+
 def read_and_clean_data(input_file_path):
-    cleaned_data = set()
-    with open(input_file_path, 'r') as file:
-        header_row = file.readline().strip()
-        for line in file:
-            entry = line.strip()
-            cleaned_entry = entry
+    try:
 
-            
-            cleaned_entry = cleaned_entry.replace('nnn', 'nn')
-            cleaned_entry = cleaned_entry.replace('++', '+')
-            cleaned_entry = cleaned_entry.replace('0O', '00')
-            cleaned_entry = cleaned_entry.replace('_dot_com', '.com')
-            cleaned_entry = cleaned_entry.replace('swiming', 'swimming')
-            cleaned_entry = cleaned_entry.replace('platsburg', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('platsburgh', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('platsberg', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('_', ' ')
-            cleaned_entry = cleaned_entry.replace('plattsburg', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('plattsberg', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('plattsburghh', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('plattsbeurghhh', 'plattsburgh')
-            cleaned_entry = cleaned_entry.replace('plattsburghh', 'plattsburgh')
+        cleaned_data = set()
+        with open(input_file_path, 'r') as file:
+            header_row = file.readline().strip()
+            for line in file:
+                entry = line.strip()
+                cleaned_entry = entry
 
-            cleaned_data.add(cleaned_entry)
+                for correction, replacement in corrections:
+                    cleaned_entry = cleaned_entry.replace(correction, replacement)
 
-    return header_row, sorted(cleaned_data)
+                cleaned_data.add(cleaned_entry)
+
+        return header_row, sorted(cleaned_data)
+    except: 
+        print(f"An error occurred while processing {input_file_path}.")
+        return None, set()
 
 def write_cleaned_data(header, data, output_file_path):
-    with open(output_file_path, 'w') as file:
-        file.write(header + '\n') 
-        for entry in data:
-            file.write(entry + '\n') 
+    try:
+        with open(output_file_path, 'w') as file:
+            file.write(header + '\n') 
+            for entry in data:
+                file.write(entry + '\n') 
+    
+    except:
+        print("An error occurred during writing to the file.")
 
 def compare_files(file_path1, file_path2):
-
-    header1, data1 = read_and_clean_data(file_path1)
-    header2, data2 = read_and_clean_data(file_path2)
-
-    
-    return header1 == header2 and data1 == data2
+    try:
+        header1, data1 = read_and_clean_data(file_path1)
+        header2, data2 = read_and_clean_data(file_path2)
+        return header1 == header2 and data1 == data2
+    except:
+        print("An error occurred while comparing files.")
+        return False
 
 source_data_file = 'source.txt'
 received_data_files = ['as_received1.txt', 'as_received2.txt', 'as_received3.txt']
